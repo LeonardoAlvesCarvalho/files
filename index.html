@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Doceria & Bolos — Doces artesanais com amor e estilo. Bolos personalizados, cupcakes, brigadeiros e muito mais." />
+  <title>Doceria & Bolos — Doces Artesanais</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#inicio" class="brand" aria-label="Ir para início">
+        <div class="logo" aria-hidden="true">🧁</div>
+        <div>
+          <span class="brand-name">Doceria &amp; Bolos</span>
+          <p class="brand-tag">Doces artesanais com amor</p>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <nav class="main-nav" aria-label="Navegação principal">
+          <a href="#inicio">Início</a>
+          <a href="#produtos">Produtos</a>
+          <a href="#contato">Contato</a>
+        </nav>
+
+        <button class="cart-icon-button" id="openCartButton" aria-label="Abrir carrinho de compras">
+          <span class="cart-icon" aria-hidden="true">🛒</span>
+          <span class="cart-badge" id="cartCount" aria-live="polite" aria-label="Itens no carrinho">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+
+    <!-- Hero -->
+    <section class="hero" id="inicio" aria-label="Apresentação">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Loja de doces artesanais</span>
+          <h1>Delícias em cada mordida</h1>
+          <p>Explore produtos feitos à mão, com ingredientes selecionados e embalados com carinho — prontos para tornar seu momento especial.</p>
+          <div class="hero-actions">
+            <a href="#produtos" class="btn btn-primary">Ver produtos</a>
+            <button class="btn btn-secondary" id="openCartButtonHero">Ver carrinho</button>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-card">
+            <div class="hero-card-icon">🍰</div>
+            <div>
+              <strong>Bolos personalizados</strong>
+              <p>Sabor, recheio e acabamento do seu jeito.</p>
+            </div>
+          </div>
+          <div class="hero-card hero-card-alt">
+            <div class="hero-card-icon">🍬</div>
+            <div>
+              <strong>Doces finos</strong>
+              <p>Brigadeiros, trufas e cookies gourmet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Produtos -->
+    <section class="products-section" id="produtos" aria-label="Catálogo de produtos">
+      <div class="container section-head">
+        <div>
+          <span class="eyebrow">Catálogo</span>
+          <h2>Nossos doces favoritos</h2>
+        </div>
+        <div class="filters" id="filterButtons" role="group" aria-label="Filtrar por categoria"></div>
+      </div>
+
+      <div class="product-grid" id="productGrid" role="list"></div>
+    </section>
+
+  </main>
+
+  <!-- ============ CART DRAWER ============ -->
+  <div class="cart-backdrop" id="cartBackdrop" aria-hidden="true"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrinho de compras" aria-hidden="true" role="dialog">
+    <div class="cart-header">
+      <div>
+        <span class="eyebrow">Seu carrinho</span>
+        <h3>Resumo do pedido</h3>
+      </div>
+      <button class="icon-button" id="closeCartButton" aria-label="Fechar carrinho">×</button>
+    </div>
+
+    <div class="cart-list" id="cartItems" role="list"></div>
+
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span>Total</span>
+        <strong id="cartTotal">R$ 0,00</strong>
+      </div>
+      <div class="cart-note">
+        <p>Finalize seu pedido diretamente pelo WhatsApp.</p>
+        <small>Seu carrinho é salvo automaticamente.</small>
+      </div>
+      <div class="cart-actions">
+        <button class="btn btn-secondary btn-full" id="continueShoppingButton">Continuar comprando</button>
+        <button class="btn btn-primary btn-full" id="checkoutButton" disabled aria-disabled="true">
+          Finalizar pedido no WhatsApp
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ TOAST ============ -->
+  <div class="toast" id="toastMessage" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ============ CHECKOUT MODAL ============ -->
+  <div class="modal-backdrop" id="checkoutModalBackdrop" aria-hidden="true"></div>
+
+  <div class="checkout-modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle" aria-hidden="true">
+    <div class="modal-header">
+      <h2 id="checkoutModalTitle">Finalizar Pedido</h2>
+      <button class="modal-close" id="closeCheckoutModal" aria-label="Fechar modal">×</button>
+    </div>
+
+    <div class="modal-body">
+      <form id="checkoutForm" class="checkout-form" novalidate>
+
+        <!-- Dados do Cliente -->
+        <fieldset class="form-section">
+          <legend>👤 Dados do Cliente</legend>
+          <div class="form-group">
+            <label for="customerName">Nome completo <span aria-hidden="true">*</span></label>
+            <input type="text" id="customerName" name="customerName" autocomplete="name" placeholder="Seu nome completo" required />
+            <span class="error-message" id="customerNameError" role="alert"></span>
+          </div>
+        </fieldset>
+
+        <!-- Endereço de Entrega -->
+        <fieldset class="form-section">
+          <legend>📍 Endereço de Entrega</legend>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="street">Rua <span aria-hidden="true">*</span></label>
+              <input type="text" id="street" name="street" autocomplete="address-line1" placeholder="Nome da rua" required />
+              <span class="error-message" id="streetError" role="alert"></span>
+            </div>
+            <div class="form-group form-group--narrow">
+              <label for="number">Número <span aria-hidden="true">*</span></label>
+              <input type="text" id="number" name="number" autocomplete="address-line2" placeholder="Nº" required />
+              <span class="error-message" id="numberError" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="neighborhood">Bairro <span aria-hidden="true">*</span></label>
+              <input type="text" id="neighborhood" name="neighborhood" placeholder="Seu bairro" required />
+              <span class="error-message" id="neighborhoodError" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="complement">Complemento</label>
+              <input type="text" id="complement" name="complement" placeholder="Apto 101, Bloco B…" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reference">Ponto de referência</label>
+            <input type="text" id="reference" name="reference" placeholder="Ex: Próximo ao shopping" />
+          </div>
+        </fieldset>
+
+        <!-- Entrega e Pagamento -->
+        <fieldset class="form-section">
+          <legend>🕒 Detalhes da Entrega</legend>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="deliveryTime">Data desejada <span aria-hidden="true">*</span></label>
+              <input type="date" id="deliveryTime" name="deliveryTime" required />
+              <span class="error-message" id="deliveryTimeError" role="alert"></span>
+            </div>
+            <div class="form-group">
+              <label for="paymentMethod">Forma de pagamento <span aria-hidden="true">*</span></label>
+              <select id="paymentMethod" name="paymentMethod" required>
+                <option value="">Selecione…</option>
+                <option value="pix">💳 Pix</option>
+                <option value="dinheiro">💵 Dinheiro</option>
+                <option value="cartao">💳 Cartão</option>
+              </select>
+              <span class="error-message" id="paymentMethodError" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Observações adicionais</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Ex: Sem açúcar, alergias, horário preferido…"></textarea>
+          </div>
+        </fieldset>
+
+        <!-- Resumo do pedido -->
+        <fieldset class="form-section">
+          <legend>🛒 Resumo do Pedido</legend>
+          <div class="order-summary" id="orderSummary" aria-live="polite"></div>
+          <div class="order-total">
+            <strong>Total: <span id="modalTotal">R$ 0,00</span></strong>
+          </div>
+        </fieldset>
+
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" id="cancelCheckout">Voltar ao carrinho</button>
+      <button type="button" class="btn btn-primary" id="confirmCheckout" disabled aria-disabled="true">
+        <span class="btn-text">Enviar pedido via WhatsApp</span>
+        <span class="btn-loading" aria-hidden="true">
+          <span class="spinner"></span> Enviando…
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="features-section" aria-label="Diferenciais">
+    <div class="container features-grid">
+      <article class="feature-card">
+        <span class="feature-icon" aria-hidden="true">💾</span>
+        <h3>Carrinho persistente</h3>
+        <p>Seu carrinho é salvo automaticamente no navegador entre as visitas.</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-icon" aria-hidden="true">⚡</span>
+        <h3>Sem recarregar</h3>
+        <p>Adicione, remova e atualize tudo dinamicamente, sem perder o contexto.</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-icon" aria-hidden="true">📱</span>
+        <h3>100% responsivo</h3>
+        <p>Design fluido e otimizado para celular, tablet e desktop.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer" id="contato">
+    <div class="container footer-grid">
+      <div>
+        <h2>Doceria &amp; Bolos</h2>
+        <p>Delícias artesanais para comemorar momentos especiais com quem você ama.</p>
+      </div>
+      <address class="contact-list">
+        <p>📞 <a href="tel:+5521985201649">(21) 98520-1649</a></p>
+        <p>📧 <a href="mailto:contato@doceria.com.br">contato@doceria.com.br</a></p>
+        <p>📍 Itaboraí — RJ</p>
+        <p>📸 <a href="https://www.instagram.com/deliciasgourmet_magalhaes" target="_blank" rel="noopener noreferrer">@Deliciasgourmet_Magalhães</a></p>
+      </address>
+    </div>
+    <p class="footer-copy">© <span id="currentYear"></span> Doceria &amp; Bolos. Feito com ❤️</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
